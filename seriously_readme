@@ -1,0 +1,42 @@
+*someone help me make a gui for setting up configs at the start pre-game
+GUIDE:
+------------
+* "your_player_entity.py" in the "player_entities" folder is where you can start creating your player
+* use the "example_player_entity.py" file as a guide
+* the base class for your player is in the "base_player.py" file. !!!do not modify this class!!!
+* to add your player to the game, go to "main.py" and add your entity to the "args" list
+* use "your_custom_files.py" to add your own methods and stuff
+
+like this
+args = [
+    madison.BigBoi, (config.BLUE, 2),
+    example_player_entity.TEST, (config.RED, 2)
+]
+
+* when you run the project you will compete against the example player.
+:)
+feel free to add more colors to color.py and use them.
+===================================================================================
+                                  IMPORTANT
+                                   # KEEP
+           tags are required unless you want to rewrite it yourself.
+             if you do, make your own method, don't screw up mine
+
+                                 # REQUIRED
+                      tags should not be removed either
+===================================================================================
+                            -----------------------
+                             !!!- DO NOT EDIT -!!!
+                                   CONFIG.py  except for adding your player to the args list for testing
+                               PLAYER_METHODS.py
+                                    FOOD.py
+                                BASE_PLAYER.py
+                                    MAIN.py
+                             !!!- DO NOT EDIT -!!!
+                            -----------------------
+!!!* you can edit config to play around with "what if's" but the config file will
+not change in the final product
+===================================================================================
+if you have optimizations you want to add just check with me first and make
+sure everybody can use it
+--mad
