@@ -75,3 +75,21 @@ def find_mobs(player, mobs, my_player_entity_type):
                 min_distance = distance
 
     return nearest_mob
+
+
+def FIGHT(player_a, player_b):
+    if player_a.Resources < player_b.Resources:
+        print("\n")
+        print(player_a.Resources, ' vs ', player_b.Resources)
+        print("a loses")
+        print("\n")
+        return config.EATPLAYER, player_a
+    elif player_b.Resources < player_a.Resources:
+        print("\n")
+        print(player_a.Resources, ' vs ', player_b.Resources)
+        print("  loses b")
+        print("\n")
+        player_b.Resources += config.EATPLAYER
+        return 0, player_b
+    else:
+        return 0

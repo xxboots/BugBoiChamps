@@ -1,4 +1,6 @@
 import random
+
+import colors
 import config
 import entity
 
@@ -31,18 +33,20 @@ class PlayerMob(object):
             self.color, self.initial_radius = args[:2]
             self.sub_class = args[-1]
         else:
-            self.color, self.initial_radius = config.BLUE, 2
+            self.color, self.initial_radius = colors.BLUE, 2
             self.sub_class = PlayerMob
 
         self.radius = self.initial_radius
 
     # THIS IS REQUIRED
     def spawn(self, screen):
-        self.spawn_x = random.randrange(0, config.WIDTH, 1)
+        if not self.spawn_x:
+            self.spawn_x = random.randrange(0, config.WIDTH, 1)
         self.x = self.spawn_x
         self.last_x = self.x
 
-        self.spawn_y = random.randrange(0, config.HEIGHT, 1)
+        if not self.spawn_y:
+            self.spawn_y = random.randrange(0, config.HEIGHT, 1)
         self.y = self.spawn_y
         self.last_y = self.y
         self.draw(screen)
