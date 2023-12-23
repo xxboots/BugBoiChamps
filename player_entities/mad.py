@@ -49,8 +49,10 @@ class BigBoi(base.PlayerMob):
         found_mob = player_methods.find_mobs(self, mobs, BigBoi)
         if found_mob and abs(found_mob.x - self.x) < found_mob.radius and abs(
                 found_mob.y - self.y) < found_mob.radius:
-            mobs.remove(found_mob)
-            self.Resources += 1
+            resource, mob_to_remove = player_methods.FIGHT(self, found_mob)
+            if mob_to_remove:
+                mobs.remove(mob_to_remove)
+            self.Resources += resource
 
         return mobs, found_mob
 
@@ -66,7 +68,7 @@ class BigBoi(base.PlayerMob):
         if where_food:
             if abs(where_food.x - self.x) < where_food.radius and abs(where_food.y - self.y) < where_food.radius:
                 foods.remove(where_food)
-                self.Resources += 1
+                self.Resources += config.EATPLAYER
 
         return foods, where_food
 

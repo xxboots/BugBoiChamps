@@ -5,7 +5,7 @@ import player_entities.base_player as base
 leave_spawn_if_in_pxl_range = 5
 
 
-class TEST(base.PlayerMob):
+class TEST2(base.PlayerMob):
     def __init__(self, args):
         super().__init__(args)
 
@@ -47,7 +47,7 @@ class TEST(base.PlayerMob):
 
     # generic hunt
     def hunt(self, mobs):
-        found_mob = player_methods.find_mobs(self, mobs, TEST)
+        found_mob = player_methods.find_mobs(self, mobs, TEST2)
         if found_mob and abs(found_mob.x - self.x) < found_mob.radius and abs(
                 found_mob.y - self.y) < found_mob.radius:
             resource, mob_to_remove = player_methods.FIGHT(self, found_mob)
@@ -59,7 +59,7 @@ class TEST(base.PlayerMob):
 
     # generic chase
     def go_for_kill(self, mob):
-        if not isinstance(mob, TEST):
+        if not isinstance(mob, TEST2):
             distance_to_mob = ((mob.x - self.x) ** 2 + (mob.y - self.y) ** 2) ** 0.5
             if distance_to_mob < config.PROXIMITY_DISTANCE:
                 self.dir_x *= 1.05
