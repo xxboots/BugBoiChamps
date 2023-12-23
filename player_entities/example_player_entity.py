@@ -14,23 +14,26 @@ class TEST(base.PlayerMob):
         self.dir_x, self.dir_y = (
             player_methods.set_direction_main(self.dir_x, self.dir_y))
 
-        # seek food
-        where_food = object
-        if self.Omnivore or self.Vegan:
-            foods, where_food = self.seek_food(foods)
+        self.dir_x, self.dir_y, near_border = player_methods.force_direction_on_border(self)
 
-        # hunt players
-        found_mob = object
-        if self.Omnivore or self.Carnivore:
-            mobs, found_mob = self.hunt(mobs)
+        if not near_border:
+            # seek food
+            where_food = object
+            if self.Omnivore or self.Vegan:
+                foods, where_food = self.seek_food(foods)
 
-        # handle findings
-        if self.Omnivore:
-            self.vegan_or_not(where_food, found_mob)
-        if self.Vegan:
-            self.veg_out(where_food)
-        if self.Carnivore:
-            self.flesh_out(found_mob)
+            # hunt players
+            found_mob = object
+            if self.Omnivore or self.Carnivore:
+                found_mob, mobs = self.hunt(mobs)
+
+            # handle findings
+            if self.Omnivore:
+                self.vegan_or_not(where_food, found_mob)
+            if self.Vegan:
+                self.veg_out(where_food)
+            if self.Carnivore:
+                self.flesh_out(found_mob)
 
         # set velocity in direction
         self.velocity_x = self.dir_x * config.PLAYER_SPEED
@@ -40,26 +43,20 @@ class TEST(base.PlayerMob):
         self.x += self.velocity_x
         self.y += self.velocity_y
 
-        if self.Resources % 10 == 0:
+        if self.SpawnResources % 10 == 0:
             self.generate_child(screen, mobs)
 
         return foods, mobs
 
     # generic hunt
     def hunt(self, mobs):
-        found_mob = player_methods.find_mobs(self, mobs, TEST)
-        if found_mob and abs(found_mob.x - self.x) < found_mob.radius and abs(
-                found_mob.y - self.y) < found_mob.radius:
-            resource, mob_to_remove = player_methods.FIGHT(self, found_mob)
-            if mob_to_remove:
-                mobs.remove(mob_to_remove)
-            self.Resources += resource
-
-        return mobs, found_mob
+        found_mob, mobs = player_methods.find_mobs(self, mobs, self.sub_class)
+        mobs, self.Resources, self.SpawnResources, self.radius = player_methods.try_kill(self, found_mob, mobs)
+        return found_mob, mobs
 
     # generic chase
     def go_for_kill(self, mob):
-        if not isinstance(mob, TEST):
+        if not isinstance(mob, self.sub_class):
             distance_to_mob = ((mob.x - self.x) ** 2 + (mob.y - self.y) ** 2) ** 0.5
             if distance_to_mob < config.PROXIMITY_DISTANCE:
                 self.dir_x *= 1.05
@@ -76,8 +73,13 @@ class TEST(base.PlayerMob):
         where_food = player_methods.find_food(self, foods)
         if where_food:
             if abs(where_food.x - self.x) < where_food.radius and abs(where_food.y - self.y) < where_food.radius:
+                self.Resources += where_food.resource
+                self.SpawnResources += where_food.resource
+                if (self.radius + (config.FOOD_RADIUS_MOD * where_food.radius)) > config.MAX_PLAYER_SIZE:
+                    self.radius = config.MAX_PLAYER_SIZE
+                else:
+                    self.radius += (config.FOOD_RADIUS_MOD * where_food.radius)
                 foods.remove(where_food)
-                self.Resources += 1
 
         return foods, where_food
 
