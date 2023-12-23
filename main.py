@@ -2,7 +2,7 @@ import pygame
 import sys
 import food
 import config
-from player_entities import madison
+from player_entities import mad
 from player_entities import example_player_entity
 import colors
 
@@ -17,7 +17,7 @@ FOODS = list()
 FOOD = food.INIT_FOOD(SCREEN, FOODS)
 
 args = [
-    madison.BigBoi, (colors.BLUE, 2),
+    mad.BigBoi, (colors.BLUE, 2),
     example_player_entity.TEST, (colors.RED, 2)
 ]
 
