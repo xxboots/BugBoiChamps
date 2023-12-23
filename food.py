@@ -1,12 +1,14 @@
+import pygame
+
 import entity
 import config
 import random
 import colors
 
 
-def INIT_FOOD(screen, foodarr):
+def INIT_FOOD(screen, foodarr, num):
     i = 0
-    while i < config.NUM_FOOD:
+    while i < num:
         food = Food(colors.GREEN)
         foodarr.append(food)
         food.spawn()
@@ -15,14 +17,13 @@ def INIT_FOOD(screen, foodarr):
     return foodarr
 
 
-def spawn_food(count, screen):
-    food = Food(colors.GREEN)
-
-    i = 0
-    while i < count:
-        food.spawn()
-        food.draw(screen)
-        i += 1
+def cheese(resource_value, x, y):
+    food = Food(colors.WHITE)
+    food.x = int(x)
+    food.y = int(y)
+    food.radius = random.randint(3, 12)
+    food.resource = resource_value
+    return food
 
 
 class Food(object):
@@ -32,10 +33,11 @@ class Food(object):
         self.alive = True
         self.color = color
         self.radius = 2
+        self.resource = config.FOOD_VALUE
 
     def spawn(self):
-        self.x = random.randrange(0, config.WIDTH, 1)
-        self.y = random.randrange(0, config.HEIGHT, 1)
+        self.x = random.randrange(config.BORDER_MARGIN, config.WIDTH - config.BORDER_MARGIN, 1)
+        self.y = random.randrange(config.BORDER_MARGIN, config.HEIGHT - config.BORDER_MARGIN, 1)
 
     def draw(self, screen):
         entity.circle(screen, (self.x, self.y), self.color, self.radius)

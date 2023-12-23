@@ -1,5 +1,4 @@
 import random
-
 import colors
 import config
 import entity
@@ -10,6 +9,7 @@ class PlayerMob(object):
         self.initial_args = args
         self.Alive = True
         self.Resources = 5
+        self.SpawnResources = self.Resources
         self.Carnivore = False
         self.Vegan = False
         self.Omnivore = True
@@ -41,24 +41,27 @@ class PlayerMob(object):
     # THIS IS REQUIRED
     def spawn(self, screen):
         if not self.spawn_x:
-            self.spawn_x = random.randrange(0, config.WIDTH, 1)
+            self.spawn_x = random.randrange(config.BORDER_MARGIN, config.WIDTH - config.BORDER_MARGIN, 1)
         self.x = self.spawn_x
         self.last_x = self.x
 
         if not self.spawn_y:
-            self.spawn_y = random.randrange(0, config.HEIGHT, 1)
+            self.spawn_y = random.randrange(config.BORDER_MARGIN, config.HEIGHT - config.BORDER_MARGIN, 1)
+
         self.y = self.spawn_y
         self.last_y = self.y
         self.draw(screen)
 
     # THIS IS REQUIRED
     def draw(self, screen):
+        if self.SpawnResources == 10 and self.radius <= config.MAX_PLAYER_SIZE:
+            self.radius += 0.01
         entity.circle(screen, (self.x, self.y), self.color, self.radius)
 
     # THIS IS REQUIRED
     def generate_child(self, screen, mobs):
-        if self.Resources >= 10:
-            num_children = self.Resources // 10
+        if self.SpawnResources >= 10:
+            num_children = self.SpawnResources // 10
             if num_children > 0:
                 new_mob = self.sub_class(self.initial_args)
                 # Offset the child's spawn location by a few pixels
@@ -68,5 +71,4 @@ class PlayerMob(object):
                 new_mob.spawn_y = self.y + offset_y
                 new_mob.spawn(screen)
                 mobs.append(new_mob)
-                self.Resources %= 10  # Reduce resources by the amount used to create one child
-        return mobs
+                self.SpawnResources %= 10  # Reduce resources by the amount used to create one child
